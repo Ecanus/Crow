@@ -30,6 +30,6 @@ class Utility(commands.Cog):
     async def whatis(self, ctx, word: Text):
         """Method for defining the given word.
         """
-        whatis_str = utils.get_definition_str(word)
-        await ctx.reply(utils.sign(whatis_str))
+        whatis_str = utils.get_definitions_from_website(word)
+        await ctx.reply(utils.append_signature(whatis_str))
 
