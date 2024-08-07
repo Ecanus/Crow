@@ -38,7 +38,7 @@ from bs4 import BeautifulSoup
 
 from akoma.utils import get_definitions_from_website
 
-definitions = get_definitions_from_website("pickle")
+definitions = get_definitions_from_website("color")
 print(definitions)
 
 
