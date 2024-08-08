@@ -33,3 +33,13 @@ class Utility(commands.Cog):
         whatis_str = utils.get_definitions_from_website(word)
         await ctx.reply(utils.append_signature(whatis_str))
 
+    @commands.command()
+    async def pkmn(self, ctx, pokemon_name: Text):
+        """Method for revealing information on the given pokemon.
+        """
+        pokemon_sprite_url, pokemon_string =\
+            utils.get_pokemon_entry(pokemon_name)
+
+        await ctx.send(pokemon_sprite_url)
+        await ctx.send(utils.append_signature(pokemon_string))
+

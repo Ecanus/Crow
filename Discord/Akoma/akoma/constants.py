@@ -1,6 +1,5 @@
-SIGNATURE = ":white_heart:"
-
 DATETIME_FORMAT_LONG = "%Y-%m-%d"
+LANGUAGE_EN = "en"
 
 REQUEST_ERROR_MESSAGE = "Error accessing {url}\nStatus code: {code}"
 RESPONSE_200 = 200
@@ -35,3 +34,5 @@ PARTS_OF_SPEECH_CLASS = "parts-of-speech"
 WHATIS_RESPONSE_HEADER = ":books: **{word}**\n\n"
 SPELLING_SUGGESTION_DISPLAY_NUM = 5
 DEFINITION_DISPLAY_NUM = 3
+
+SIGNATURE = ":white_heart:"

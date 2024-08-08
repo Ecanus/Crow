@@ -1,12 +1,79 @@
 import datetime
 import requests
 
+import pokebase as pb
 from bs4 import BeautifulSoup
 from bs4.element import ResultSet
-from typing import Text, Optional, Any, Dict, List
+
+from typing import Text, Optional, Any, Dict, Union, Tuple, List
 
 import akoma.constants as c
 from akoma.errors import WhatIsError
+
+def get_poke_berry_entry():
+    pass
+
+def get_pokemon_entry(name_or_id: Union[int, Text]) -> Tuple[Text, Text]:
+    entry_str = ""
+
+    pokemon_entry = pb.pokemon(name_or_id.lower())
+    pokemon_abilities = pokemon_entry.abilities
+    pokemon_sprite = pb.SpriteResource("pokemon", pokemon_entry.id)
+
+    # name and genus
+    entry_str += ("**{name},**{genus}\n\n").format(
+        name=split_join(pokemon_entry.name).title(),
+        genus=get_pokemon_genus_str(pokemon_entry.species.genera)
+    )
+
+    # types and abilities
+    types = "/".join([t.type.name.capitalize() for t in pokemon_entry.types])
+
+    entry_str += (
+        "**Type:** {types}\n"
+        "**Abilities:** {abilities}\n").format(
+        types=types,
+        abilities=get_pokemon_abilities_str(pokemon_abilities),
+    )
+
+    # hidden abilities
+    hidden_abilities = get_pokemon_abilities_str(
+        pokemon_abilities, is_hidden=True)
+
+    if hidden_abilities:
+        entry_str += (
+            "**Hidden Ability:** {hidden_ability}\n").format(
+            hidden_ability=hidden_abilities
+        )
+
+    # extra line for section break
+    entry_str += "\n"
+
+    # height and weight
+    entry_str += (
+        "H: *{height}m*\n"
+        "W: *{weight}kg*\n").format(
+            height=pokemon_entry.height / 10, # decimetres to metres
+            weight=pokemon_entry.weight / 10, # hectograms to kilograms
+        )
+
+    return pokemon_sprite.url, entry_str
+    # return entry_str
+
+def get_poke_item_entry():
+    pass
+
+def get_poke_fling_entry():
+    pass
+
+def get_poke_move_entry():
+    pass
+
+def get_poke_ability_entry():
+    pass
+
+def get_poke_natures_entry():
+    pass
 
 def get_definitions_from_website(word: Text) -> Text:
     """Returns definitions associated with the given word from the
@@ -185,3 +252,39 @@ def format_date(
     """Returns a well-formated date string for readability using the
     given format value."""
     return date.strftime(format)
+
+def get_pokemon_genus_str(
+        genera_list: List[Dict], lang: Optional[Text]=c.LANGUAGE_EN) -> Text:
+    """Returns the genus of the given genera_list which corresponds to
+    the value of lang, if one is found.
+    Else returns an empty string.
+    """
+    genus = next(
+        (genera.genus for genera in genera_list
+        if genera.language.name == c.LANGUAGE_EN), None)
+
+    if genus is None:
+        return ""
+    else:
+        return " *the {genus}*".format(genus=genus)
+
+def get_pokemon_abilities_str(
+        abilities_list: List[Dict], is_hidden: bool=False) -> Text:
+    """Returns concatenated str of names of abilites within the given
+    abilities_list that are not hidden.
+
+    If hidden==True, returns concatenated str of names of abilities within the
+    abilities_list that *are* hidden.
+    """
+    return ", ".join([
+        split_join(ability.ability.name).title() for ability in abilities_list
+        if ability.is_hidden == is_hidden])
+
+def split_join(
+        str: Text, joiner_str: Text=" ", splitter_str: Text="-") -> Text:
+        """Helper function that splits a string using the given splitter, and
+        joins the then split string with the joiner.
+
+        Returns the newly joined string.
+        """
+        return joiner_str.join(str.split(splitter_str))

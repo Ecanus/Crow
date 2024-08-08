@@ -14,8 +14,8 @@ futures==3.0.5
 goslate==1.5.4
 idna==3.7
 multidict==6.0.5
+pokebase==1.4.1
 pycparser==2.22
-PyDictionary==2.0.1
 PyNaCl==1.5.0
 python-dotenv==1.0.1
 requests==2.32.3

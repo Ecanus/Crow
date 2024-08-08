@@ -36,9 +36,9 @@ from bs4 import BeautifulSoup
 #         for d in definitions:
 #             print(d.get_text())
 
-from akoma.utils import get_definitions_from_website
+from akoma.utils import get_pokemon_entry
 
-definitions = get_definitions_from_website("color")
-print(definitions)
+pokemon = get_pokemon_entry("ditto")
+print(pokemon)
 
 
